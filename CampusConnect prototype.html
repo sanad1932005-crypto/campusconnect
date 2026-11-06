@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CampusConnect prototype</title>
+<style>
+:root{--bg:#f7f4f0;--card:#fff;--ink:#2b2320;--mut:#6f5a52;--acc:#8e5a4a;--on:#fff;--line:#c9b8ae;--soft:#f1e9e4;--err:#a3321f;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1d1816;--card:#2a2320;--ink:#f3ebe6;--mut:#c4ada3;--acc:#c98a76;--on:#1d1816;--line:#5a4a43;--soft:#2f2724;--err:#ff9a86;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1d1816;--card:#2a2320;--ink:#f3ebe6;--mut:#c4ada3;--acc:#c98a76;--on:#1d1816;--line:#5a4a43;--soft:#2f2724;--err:#ff9a86;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
+.app{display:flex;flex-direction:column;height:100%;max-width:430px;margin:0 auto}
+header{display:flex;align-items:center;gap:10px;padding:10px 12px}
+header b{flex:1;font-weight:500}
+.logo{width:32px;height:32px;border-radius:8px;background:var(--acc);display:grid;place-items:center;font-size:16px;margin:0 6px}
+.ic{min-width:44px;min-height:44px;background:none;border:0;color:var(--mut);font-size:20px;cursor:pointer}
+main{flex:1;overflow:auto;padding:0 20px 12px}
+main.c{text-align:center}.c .card{text-align:left}
+h1{font-size:28px;font-weight:500;margin:8px 0 10px}h1:focus{outline:none}
+h3{font-size:16px;margin:16px 0 8px}
+footer{padding:12px 20px;display:grid;gap:8px;border-top:1px solid var(--line)}
+nav{display:flex;border-top:1px solid var(--line)}
+nav button{flex:1;min-height:56px;background:none;border:0;color:var(--mut);font:inherit;cursor:pointer}
+nav [aria-current]{color:var(--acc);font-weight:700}
+.mut{color:var(--mut)}.sm{font-size:14px}.acc{color:var(--acc)}
+button:focus-visible,select:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.btn{min-height:52px;border-radius:14px;border:1px solid var(--acc);background:var(--acc);color:var(--on);font:inherit;font-weight:600;cursor:pointer}
+.btn.o{background:var(--card);color:var(--acc)}
+.link{background:none;border:0;color:var(--acc);font:inherit;font-weight:600;min-height:44px;cursor:pointer;display:block;margin:4px auto 0}
+select{width:100%;min-height:52px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;padding:0 12px}
+.tap{display:grid;gap:8px;justify-items:center;width:100%;margin-top:16px;padding:28px 16px;background:var(--soft);border:1px solid var(--line);border-radius:18px;color:var(--ink);font:inherit;font-size:18px;cursor:pointer}
+.nfc{font-size:44px}
+.fname{display:flex;align-items:center;gap:8px;font-size:18px;font-weight:700;margin:8px 0 14px}
+.dots{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.dots i{height:56px;border:1px solid var(--line);border-radius:12px;background:var(--card);display:grid;place-items:center;font-style:normal;font-size:28px}
+.err{color:var(--err);min-height:1.4em;text-align:center;margin:8px 0 0}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px}
+.pad button{min-height:56px;font-size:22px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.ring{width:96px;height:96px;border-radius:50%;margin:20px auto 12px;display:grid;place-items:center;font-size:44px;background:var(--acc);color:var(--on);box-shadow:0 0 0 12px var(--soft)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin:12px 0;display:block;width:100%;text-align:left;color:var(--ink);font:inherit;box-sizing:border-box}
+.card hr{border:0;border-top:1px solid var(--line)}.card p{margin:6px 0}
+.card.soft{background:var(--soft)}.card.ln{cursor:pointer}
+.chipst{display:inline-block;padding:4px 10px;border-radius:99px;background:var(--soft);color:var(--acc);font-size:14px;font-weight:600;margin:4px 0}
+.cd{position:relative;width:96px;height:96px;margin:4px auto 6px}
+.cd svg{width:100%;height:100%;transform:rotate(-90deg)}
+.cd circle{fill:none;stroke:var(--line);stroke-width:8}
+.cd #arc{stroke:var(--acc);stroke-linecap:round;stroke-dasharray:283;animation:a 10s linear forwards}
+@keyframes a{to{stroke-dashoffset:283}}
+.n{position:absolute;inset:0;display:grid;place-items:center;font-size:26px;font-weight:700}
+@media(prefers-reduced-motion:reduce){.cd #arc{animation:none}}
+.strip{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.slots{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.chip{min-height:48px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;font:inherit;cursor:pointer;padding:6px 2px}
+.chip[aria-pressed="true"]{background:var(--acc);color:var(--on);border-color:var(--acc)}
+.slots .chip[aria-pressed="true"]::before,.dt[aria-pressed="true"] small::before{content:"✓ "}
+.dt{display:grid;gap:2px}.dt b{font-size:20px;font-weight:500}
+#t{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:14px}
+#t[hidden]{display:none}
+</style></head><body>
+<div class="app" id="app"></div><div id="t" role="status" hidden></div>
+<script>
+const $=s=>document.querySelector(s),app=$('#app');
+const D=['Tue','Wed','Thu','Fri','Sat'],F=['Tuesday','Wednesday','Thursday','Friday','Saturday'],T=['3:00–4:00 pm','4:00–5:00 pm','5:00–6:00 pm','6:00–7:00 pm'];
+const dl=i=>`${D[i]}, ${27+i} Oct`,df=i=>`${F[i]}, ${27+i} October 2026`;
+const FAC=['Campus gym · Level 2','Library · Main entrance','Science lab · Level 1'];
+const S={cur:'home',pin:'',err:'',sel:{d:0,t:1},r:{d:2,t:2},b:null,old:null,subj:'Mathematics',fac:FAC[0]};
+let tm,sec=10;
+try{S.b=JSON.parse(localStorage.getItem('cc-booking')||'null')}catch(e){}
+const save=()=>{try{localStorage.setItem('cc-booking',JSON.stringify(S.b))}catch(e){}};
+const fn=()=>S.fac.split(' · ')[0];
+const hd=b=>`<header>${b?`<button class="ic" data-go="${b}" aria-label="Back">←</button>`:`<span class="logo" aria-hidden="true">🔑</span>`}<b>CampusConnect</b><button class="ic" data-act="help" aria-label="Help">?</button></header>`;
+const ring=c=>`<div class="ring" aria-hidden="true">${c==='lock'?'🔒':'✓'}</div>`;
+const tabs=c=>`<nav>${[['home','Access'],['book','Sessions']].map(([k,l])=>`<button data-go="${k}" ${c==k?'aria-current="page"':''}>${l}</button>`).join('')}</nav>`;
+const sc=(s,x='')=>`<div class="card"><b>${s.subj} tutoring</b><div class="mut sm">One-to-one session</div><hr><p>📅 ${df(s.d)}</p><p>🕒 ${T[s.t]}</p>${x}</div>`;
+const cd=(n,x)=>`<div class="card soft c"><div class="cd"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="45"/>${x?'':'<circle id="arc" cx="50" cy="50" r="45"/>'}</svg><div class="n"><span id="sec">${n}</span>s</div></div><b>${x?'Access window expired':'Enter within 10 seconds'}</b></div>`;
+const pick=o=>`<div class="strip">${D.map((x,i)=>`<button class="chip dt" data-d="${i}" aria-pressed="${o.d==i}" aria-label="${F[i]} ${27+i} October"><small>${x}</small><b>${27+i}</b></button>`).join('')}</div><h3>Select a time</h3><div class="slots">${T.map((x,i)=>`<button class="chip" data-t="${i}" aria-pressed="${o.t==i}">${x}</button>`).join('')}</div>`;
+const NOTE='You’ll get a confirmation by email and push notification.';
+const V={
+home:()=>`${hd()}<main><h1>Your campus, unlocked.</h1><label class="mut sm" for="fac">Facility</label><select id="fac" data-sel="fac">${FAC.map(x=>`<option ${x==S.fac?'selected':''}>${x}</option>`).join('')}</select><button class="tap" data-go="granted"><span class="nfc" aria-hidden="true">📱</span><b>Tap your phone to enter</b><span class="mut sm">Prototype: tap here to simulate the reader</span></button><button class="link" data-go="pin">Use PIN instead</button></main>${tabs('home')}`,
+pin:()=>`${hd('home')}<main><h1>Enter your PIN</h1><p class="mut">Use your 6-digit facility PIN to unlock the door.</p><div class="fname"><span aria-hidden="true">🚪</span><span>${fn()}</span></div><div class="dots" role="img" aria-label="${S.pin.length} of 6 digits entered">${[0,1,2,3,4,5].map(i=>`<i>${S.pin[i]?'•':''}</i>`).join('')}</div><p class="err" role="alert">${S.err}</p><button class="link" data-act="help">Forgot your PIN?</button><div class="pad">${[1,2,3,4,5,6,7,8,9].map(n=>`<button data-k="${n}">${n}</button>`).join('')}<span></span><button data-k="0">0</button><button data-k="⌫" aria-label="Delete last digit">⌫</button></div></main><footer><button class="btn" data-act="unlock">🔓 Unlock facility</button><p class="mut sm" style="text-align:center;margin:0">Prototype PIN: 123456</p></footer>`,
+granted:()=>`${hd()}<main class="c">${ring()}<h1 role="status">You’re in!</h1><p class="mut">Access granted. The door is unlocked.<br>Make yourself at home.</p>${cd(10)}</main><footer><button class="btn" data-go="home">Done</button><button class="link" data-act="help">Door not opening? Get help</button></footer>`,
+expired:()=>`${hd()}<main class="c">${ring('lock')}<h1 role="status">Door locked again</h1><p class="mut">The time ran out.</p>${cd(0,1)}</main><footer><button class="btn" data-act="again">Unlock again</button><button class="link" data-act="help">Door not opening? Get help</button></footer>`,
+book:()=>`${hd()}<main><h1>Book a session</h1>${S.b?`<button class="card ln" data-go="manage"><small class="mut">Your upcoming session</small><br><b>${S.b.subj} · ${dl(S.b.d)} · ${T[S.b.t]}</b><br><span class="acc">Manage session ›</span></button>`:''}<p class="mut">Choose your subject, date and time.</p><label for="sb"><b>Subject</b></label><select id="sb" data-sel="subj">${['Mathematics','Physics','Writing'].map(x=>`<option ${x==S.subj?'selected':''}>${x}</option>`).join('')}</select><h3>October 2026</h3>${pick(S.sel)}<p class="mut sm">Selected: ${dl(S.sel.d)} · ${T[S.sel.t]}</p></main><footer><button class="btn" data-act="bookit">📅 Book session</button></footer>${tabs('book')}`,
+confirmed:()=>`${hd()}<main class="c">${ring()}<h1 role="status">Booking confirmed</h1><p class="mut">Your tutoring session is booked.<br>We look forward to seeing you.</p>${sc(S.b)}</main><footer><button class="btn" data-go="home">Done</button><button class="btn o" data-go="manage">Manage session</button></footer>`,
+manage:()=>`${hd('book')}<main><h1>Manage session</h1><p class="mut">View or change your tutoring session.</p><span class="chipst">✓ Booking confirmed</span>${sc(S.b)}<div class="card"><b>Cancellation policy</b><p class="mut sm">Free cancellation up to 24 hours before your session.</p></div><div class="card"><p class="mut sm" style="margin:0">${NOTE}</p></div><div class="card soft"><b>Plans changed?</b><p class="mut sm">Choose another date and time, or cancel your tutoring session.</p></div></main><footer><button class="btn" data-go="resched">📅 Reschedule session</button><button class="btn o" data-go="cancel">Cancel session</button></footer>`,
+resched:()=>`${hd('manage')}<main><h1>Reschedule a session</h1><p class="mut">Choose a new tutoring date and time.</p><div class="card"><small class="mut">Original session</small><br><b>${S.b.subj} · Tutoring</b><div class="mut sm">${dl(S.b.d)} · ${T[S.b.t]}</div></div><h3>October 2026</h3>${pick(S.r)}<p class="mut sm">New session: ${dl(S.r.d)} · ${T[S.r.t]}</p></main><footer><button class="btn" data-act="reschedit">Confirm reschedule</button><p class="mut sm" style="text-align:center;margin:0">${NOTE}</p></footer>`,
+cancel:()=>`${hd('manage')}<main><h1>Cancel this session?</h1><p class="mut">Check your tutoring session details before you confirm.</p>${sc(S.b)}</main><footer><button class="btn" data-act="docancel">Yes, cancel session</button><button class="btn o" data-go="manage">Keep booking</button></footer>`,
+rescheduled:()=>`${hd()}<main class="c">${ring()}<h1 role="status">Session rescheduled</h1><p class="mut">Your tutoring session has been moved.</p>${sc(S.b,`<p class="mut sm"><s>${df(S.old.d)} · ${T[S.old.t]}</s></p>`)}<p class="mut sm">A confirmation has been sent to you.</p></main><footer><button class="btn" data-go="home">Done</button><button class="btn o" data-go="manage">Manage session</button></footer>`,
+cancelled:()=>`${hd()}<main class="c">${ring()}<h1 role="status">Session cancelled</h1><p class="mut">Your tutoring session has been cancelled.</p>${sc(S.old,'<span class="chipst">Cancelled</span>')}<p class="mut sm">A cancellation confirmation has been sent to you.</p></main><footer><button class="btn" data-go="home">Done</button><button class="btn o" data-go="book">Book another session</button></footer>`
+};
+const rr=()=>{app.innerHTML=V[S.cur]()};
+function go(s){
+  clearInterval(tm);
+  if(['manage','resched','cancel'].includes(s)&&!S.b)s='book';
+  if(s==='resched')S.r={d:S.b.d,t:S.b.t};
+  if(s==='pin')S.pin='';
+  S.cur=s;S.err='';rr();
+  if(s==='granted'){sec=10;tm=setInterval(()=>{sec--;const e=$('#sec');if(e)e.textContent=sec;if(sec<=0)go('expired')},1000)}
+  const h=$('h1');if(h){h.tabIndex=-1;h.focus({preventScroll:true})}
+}
+function toast(m){const t=$('#t');t.textContent=m;t.hidden=false;clearTimeout(toast.i);toast.i=setTimeout(()=>t.hidden=true,2500)}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;const d=b.dataset;
+  if(d.go)return go(d.go);
+  if(d.k){if(d.k==='⌫')S.pin=S.pin.slice(0,-1);else if(S.pin.length<6)S.pin+=d.k;S.err='';return rr()}
+  if(d.d!==undefined){(S.cur==='book'?S.sel:S.r).d=+d.d;return rr()}
+  if(d.t!==undefined){(S.cur==='book'?S.sel:S.r).t=+d.t;return rr()}
+  switch(d.act){
+    case'help':return toast('Help isn’t part of this prototype.');
+    case'unlock':if(S.pin==='123456')return go('granted');S.err=S.pin.length<6?'Enter all 6 digits.':'Incorrect PIN. Try again.';if(S.pin.length===6)S.pin='';return rr();
+    case'again':return go('pin');
+    case'bookit':S.b={subj:S.subj,d:S.sel.d,t:S.sel.t};save();return go('confirmed');
+    case'reschedit':S.old={...S.b};S.b={...S.b,d:S.r.d,t:S.r.t};save();return go('rescheduled');
+    case'docancel':S.old={...S.b};S.b=null;save();return go('cancelled');
+  }
+});
+document.addEventListener('change',e=>{const k=e.target.dataset.sel;if(k){S[k]=e.target.value;rr()}});
+go('home');
+</script></body></html>
